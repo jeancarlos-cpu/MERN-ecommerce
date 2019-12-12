@@ -3,8 +3,14 @@ import { Container } from "semantic-ui-react";
 
 import Header from "./Header";
 import HeadContent from "./HeadContent";
+import Router, { useRouter } from "next/router";
+import NProgress from "nprogress";
 
-function Layout({ children }) {
+Router.onRouteChangeStart = () => NProgress.start();
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
+
+export default function Layout({ children }) {
   return (
     <>
       <Head>
@@ -25,5 +31,3 @@ function Layout({ children }) {
     </>
   );
 }
-
-export default Layout;

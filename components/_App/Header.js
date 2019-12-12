@@ -1,14 +1,18 @@
 import { Menu, Container, Image, Icon } from "semantic-ui-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
-function Header() {
-  const user = true;
+export default function Header() {
+  const user = false;
+  const { pathname } = useRouter();
+
+  const isActive = route => route === pathname;
 
   return (
     <Menu fluid id="menu" inverted>
       <Container text>
         <Link href="/">
-          <Menu.Item header>
+          <Menu.Item header active={isActive("/")}>
             <Image
               size="mini"
               src="/static/logo.svg"
@@ -19,14 +23,14 @@ function Header() {
         </Link>
 
         <Link href="/cart">
-          <Menu.Item header>
+          <Menu.Item header active={isActive("/cart")}>
             <Icon name="cart" size="large" />
             Cart
           </Menu.Item>
         </Link>
 
         {user && (
-          <Link href="/create">
+          <Link href="/create" active={isActive("/create")}>
             <Menu.Item header>
               <Icon name="add square" size="large" />
               Create
@@ -36,7 +40,7 @@ function Header() {
 
         {user ? (
           <>
-            <Link href="/account">
+            <Link href="/account" active={isActive("account")}>
               <Menu.Item header>
                 <Icon name="user" size="large" />
                 Account
@@ -51,14 +55,14 @@ function Header() {
         ) : (
           <>
             <Link href="/login">
-              <Menu.Item header>
+              <Menu.Item header active={isActive("/login")}>
                 <Icon name="sign in" size="large" />
                 Login
               </Menu.Item>
             </Link>
 
             <Link href="/signup">
-              <Menu.Item header>
+              <Menu.Item header active={isActive("/signup")}>
                 <Icon name="signup" size="large" />
                 Signup
               </Menu.Item>
@@ -69,5 +73,3 @@ function Header() {
     </Menu>
   );
 }
-
-export default Header;
