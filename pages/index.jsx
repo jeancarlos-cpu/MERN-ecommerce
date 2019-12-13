@@ -1,13 +1,14 @@
 import React from "react";
 import fetch from "isomorphic-unfetch";
+import ProductList from "../components/Index/ProductList";
 
 export default function Home({ products }) {
-  console.log(products);
-  return <>home</>;
+  return <ProductList products={products} />;
 }
 
 Home.getInitialProps = async () => {
-  const url = "http://localhost:3000/api/products";
+  console.log(process.env.BASE_URL);
+  const url = `${process.env.BASE_URL}/api/products`;
   const data = await fetch(url);
   const response = await data.json();
   return { products: response };

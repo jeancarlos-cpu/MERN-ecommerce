@@ -1,0 +1,23 @@
+import fetch from "isomorphic-unfetch";
+import ProductSummary from "../components/Product/ProductSummary";
+import ProductAttributes from "../components/Product/ProductAttributes";
+
+export default function Product({ product }) {
+  return (
+    <>
+      <ProductSummary {...product} />
+      <ProductAttributes {...product} />
+    </>
+  );
+}
+
+Product.getInitialProps = async ({ query: { _id } }) => {
+  const url = `${process.env.BASE_URL}/api/product?_id=${_id}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return { product: data };
+  } catch (e) {
+    console.log(e);
+  }
+};

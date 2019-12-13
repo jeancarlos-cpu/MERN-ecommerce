@@ -1,6 +1,5 @@
 import App from "next/app";
 import Layout from "../components/_App/Layout";
-import { Container } from "semantic-ui-react";
 
 export default class myApp extends App {
   static async getInitialProps({ Component, ctx }) {
