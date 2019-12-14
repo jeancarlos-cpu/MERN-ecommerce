@@ -1,4 +1,7 @@
 import Product from "../../models/product";
+import connectDb from "../../utils/connectDb";
+
+connectDb();
 
 export default async (req, res) => {
   const { _id } = req.query;
@@ -12,9 +15,11 @@ export default async (req, res) => {
       res.status(200).json({});
       break;
     case "POST":
-      const { name, price, description, mediaUrl } = JSON.parse(req.body);
+      const { name, price, description, mediaUrl } = req.body;
+      console.log(name, price, description, mediaUrl);
       if (!name || !price || !description || !mediaUrl) {
-        return res.status(422).send("one or more fields missing");
+        res.status(422).json("One or more fields missing");
+        break;
       }
       await new Product({
         name,
@@ -22,10 +27,10 @@ export default async (req, res) => {
         description,
         mediaUrl
       }).save();
-      res.status(201).send("OK");
+      res.status(201).json("OK");
       break;
     default:
-      res.status(405).send("Method not allowed");
+      res.status(405).json("Method not allowed");
       break;
   }
 };

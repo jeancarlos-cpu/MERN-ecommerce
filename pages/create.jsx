@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import fetch from "isomorphic-unfetch";
 import { Form, Image, Message, Header, Icon } from "semantic-ui-react";
 
@@ -13,6 +13,12 @@ export default function CreateProduct() {
   const [product, setProduct] = useState(INITIAL_PRODUCT);
   const [mediaPreview, setMediaPreview] = useState("");
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    setDisabled(Object.values(product).some(field => field === ""));
+  }, [product]);
 
   const handleChange = e => {
     const { value, name, files } = e.target;
@@ -21,26 +27,35 @@ export default function CreateProduct() {
   };
 
   const handleSubmit = async e => {
-    e.preventDefault();
-    const mediaUrl = await handleImageUpload();
-    console.log(mediaUrl);
-    const url = `${process.env.BASE_URL}/api/product`;
-    const { name, price, description } = product;
-    const config = {
-      method: "POST",
-      body: JSON.stringify({
-        name,
-        price,
-        description,
-        mediaUrl
-      })
-    };
-    const response = await fetch(url, config);
-    console.log(response);
-
-    setProduct(INITIAL_PRODUCT);
-    setSuccess(true);
-    setMediaPreview("");
+    try {
+      setLoading(true);
+      e.preventDefault();
+      const mediaUrl = await handleImageUpload();
+      const url = `${process.env.BASE_URL}/api/product`;
+      const { name, price, description } = product;
+      const config = {
+        method: "POST",
+        body: JSON.stringify({
+          name: "",
+          price,
+          description,
+          mediaUrl
+        }),
+        headers: { "Content-Type": "application/json" }
+      };
+      const response = await fetch(url, config);
+      console.log(response);
+      if (!response.ok) {
+        // throw new Error(`Error ${response.status}: ${msg}`);
+      }
+      setProduct(INITIAL_PRODUCT);
+      setMediaPreview("");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSuccess(true);
+      setLoading(false);
+    }
   };
 
   const handleImageUpload = async () => {
@@ -57,7 +72,7 @@ export default function CreateProduct() {
       const { url } = await response.json();
       return url;
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -67,7 +82,7 @@ export default function CreateProduct() {
         <Icon name="add circle" color="teal" />
         Create New Product
       </Header>
-      <Form onSubmit={handleSubmit} success={success}>
+      <Form onSubmit={handleSubmit} success={success} loading={loading}>
         <Message
           success
           icon="check"
@@ -111,6 +126,7 @@ export default function CreateProduct() {
           onChange={handleChange}
         />
         <Form.Button
+          disabled={disabled || loading}
           color="teal"
           icon="pencil"
           type="submit"
