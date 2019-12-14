@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function Header() {
-  const user = false;
+  const user = true;
   const { pathname } = useRouter();
 
   const isActive = route => route === pathname;
@@ -30,8 +30,8 @@ export default function Header() {
         </Link>
 
         {user && (
-          <Link href="/create" active={isActive("/create")}>
-            <Menu.Item header>
+          <Link href="/create">
+            <Menu.Item header active={isActive("/create")}>
               <Icon name="add square" size="large" />
               Create
             </Menu.Item>
@@ -40,8 +40,8 @@ export default function Header() {
 
         {user ? (
           <>
-            <Link href="/account" active={isActive("account")}>
-              <Menu.Item header>
+            <Link href="/account">
+              <Menu.Item header active={isActive("account")}>
                 <Icon name="user" size="large" />
                 Account
               </Menu.Item>

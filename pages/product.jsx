@@ -13,11 +13,7 @@ export default function Product({ product }) {
 
 Product.getInitialProps = async ({ query: { _id } }) => {
   const url = `${process.env.BASE_URL}/api/product?_id=${_id}`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return { product: data };
-  } catch (e) {
-    console.log(e);
-  }
+  const response = await fetch(url);
+  const data = await response.json();
+  return { product: data };
 };
