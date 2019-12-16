@@ -2,8 +2,7 @@ import { Menu, Container, Image, Icon } from "semantic-ui-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-export default function Header() {
-  const user = false;
+export default function Header({ user }) {
   const { pathname } = useRouter();
 
   const isActive = route => route === pathname;
@@ -29,7 +28,7 @@ export default function Header() {
           </Menu.Item>
         </Link>
 
-        {user && (
+        {user && !(user.role === "user") && (
           <Link href="/create">
             <Menu.Item header active={isActive("/create")}>
               <Icon name="add square" size="large" />

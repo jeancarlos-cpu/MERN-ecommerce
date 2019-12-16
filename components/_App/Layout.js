@@ -10,7 +10,7 @@ Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
-export default function Layout({ children }) {
+export default function Layout({ children, user }) {
   return (
     <>
       <Head>
@@ -24,7 +24,7 @@ export default function Layout({ children }) {
         />
         <title>ReactReserve</title>
       </Head>
-      <Header />
+      <Header user={user} />
       <Container text style={{ paddingTop: "1em" }}>
         {children}
       </Container>
