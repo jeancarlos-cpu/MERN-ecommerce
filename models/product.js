@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import shortid from "shortid";
 
 const { String, Number } = mongoose.Schema.Types;
 
@@ -14,8 +13,7 @@ const Product = new mongoose.Schema({
   },
   sku: {
     type: String,
-    unique: true,
-    default: shortid.generate()
+    unique: true
   },
   description: {
     type: String,

@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 const connection = {};
 
 const connectDb = async () => {
+  // using existing connection
   if (connection.isConnected) {
-    console.log("using existing connection");
     return;
   }
+
   try {
     const db = await mongoose.connect(process.env.MONGO_DOCKER_URI, {
       useCreateIndex: true,
@@ -16,7 +17,7 @@ const connectDb = async () => {
     });
     connection.isConnected = db.connections[0].readyState;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 

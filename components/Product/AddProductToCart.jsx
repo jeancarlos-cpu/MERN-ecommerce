@@ -6,7 +6,12 @@ export default function AddProductToCart() {
       type="number"
       min="1"
       placeholder="Quantity"
-      action={{ icon: "plus cart", color: "teal", content: "Add to Cart" }}
+      action={{
+        icon: "plus cart",
+        color: "teal",
+        content: "Add to Cart",
+        labelPosition: "right"
+      }}
     ></Input>
   );
 }

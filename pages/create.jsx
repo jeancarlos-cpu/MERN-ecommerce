@@ -15,6 +15,7 @@ export default function CreateProduct() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setDisabled(Object.values(product).some(field => field === ""));
@@ -29,6 +30,7 @@ export default function CreateProduct() {
   const handleSubmit = async e => {
     try {
       setLoading(true);
+      setError("");
       e.preventDefault();
       const mediaUrl = await handleImageUpload();
       const url = `${process.env.BASE_URL}/api/product`;
@@ -36,7 +38,7 @@ export default function CreateProduct() {
       const config = {
         method: "POST",
         body: JSON.stringify({
-          name: "",
+          name,
           price,
           description,
           mediaUrl
@@ -44,16 +46,16 @@ export default function CreateProduct() {
         headers: { "Content-Type": "application/json" }
       };
       const response = await fetch(url, config);
-      console.log(response);
       if (!response.ok) {
-        // throw new Error(`Error ${response.status}: ${msg}`);
+        const data = await response.json();
+        throw new Error(`Error ${response.status}: ${data.message}`);
       }
       setProduct(INITIAL_PRODUCT);
       setMediaPreview("");
-    } catch (err) {
-      console.error(err);
-    } finally {
       setSuccess(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setLoading(false);
     }
   };
@@ -71,8 +73,8 @@ export default function CreateProduct() {
       const response = await fetch(process.env.CLOUDINARY_URL, config);
       const { url } = await response.json();
       return url;
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -82,7 +84,13 @@ export default function CreateProduct() {
         <Icon name="add circle" color="teal" />
         Create New Product
       </Header>
-      <Form onSubmit={handleSubmit} success={success} loading={loading}>
+      <Form
+        onSubmit={handleSubmit}
+        success={success}
+        loading={loading}
+        error={Boolean(error)}
+      >
+        <Message error icon="x" header="Oops!" content={error} />
         <Message
           success
           icon="check"

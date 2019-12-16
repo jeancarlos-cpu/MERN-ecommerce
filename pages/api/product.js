@@ -1,5 +1,6 @@
 import Product from "../../models/product";
 import connectDb from "../../utils/connectDb";
+import shortid from "shortid";
 
 connectDb();
 
@@ -16,21 +17,26 @@ export default async (req, res) => {
       break;
     case "POST":
       const { name, price, description, mediaUrl } = req.body;
-      console.log(name, price, description, mediaUrl);
       if (!name || !price || !description || !mediaUrl) {
-        res.status(422).json("One or more fields missing");
+        res.status(422).json({ message: "One or more fields missing" });
         break;
       }
-      await new Product({
-        name,
-        price,
-        description,
-        mediaUrl
-      }).save();
-      res.status(201).json("OK");
+      try {
+        await new Product({
+          name,
+          price,
+          description,
+          mediaUrl,
+          sku: shortid.generate()
+        }).save();
+
+        res.status(201).json({ message: "OK" });
+      } catch {
+        res.status(500).json({ message: "Server error in creating product" });
+      }
       break;
     default:
-      res.status(405).json("Method not allowed");
+      res.status(405).json({ message: "Method not alloyed" });
       break;
   }
 };

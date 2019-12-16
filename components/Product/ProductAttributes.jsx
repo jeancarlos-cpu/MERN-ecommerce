@@ -24,6 +24,7 @@ export default function ProductAttributes({ description, _id }) {
         icon="trash alternate outline"
         color="red"
         content="Delete Product"
+        labelPosition="right"
         onClick={() => setModal(true)}
       />
       <Modal open={modal} dimmer="blurring">
