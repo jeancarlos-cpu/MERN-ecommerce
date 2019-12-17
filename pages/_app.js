@@ -3,6 +3,7 @@ import Layout from "../components/_App/Layout";
 import { redirectUser } from "../utils/auth";
 import fetch from "isomorphic-unfetch";
 import { parseCookies, destroyCookie } from "nookies";
+import { Router } from "next/router";
 
 export default class myApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -46,6 +47,16 @@ export default class myApp extends App {
     }
     return { pageProps };
   }
+
+  componentDidMount() {
+    addEventListener("storage", this.syncLogout);
+  }
+
+  syncLogout = event => {
+    if (event.key === "logout") {
+      Router.push("/login");
+    }
+  };
 
   render() {
     const { Component, pageProps } = this.props;

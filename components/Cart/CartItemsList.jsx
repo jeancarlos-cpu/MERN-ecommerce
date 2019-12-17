@@ -1,7 +1,7 @@
 import { Header, Segment, Button, Icon } from "semantic-ui-react";
+import Router from "next/router";
 
-export default function CartItemsList() {
-  const user = false;
+export default function CartItemsList({ user }) {
   return (
     <Segment secondary textAlign="center">
       <Header icon>
@@ -10,9 +10,13 @@ export default function CartItemsList() {
       </Header>
       <div>
         {user ? (
-          <Button basic>View Products</Button>
+          <Button basic onClick={() => Router.push("/")}>
+            View Products
+          </Button>
         ) : (
-          <Button basic>Login</Button>
+          <Button basic onClick={() => Router.push("/login")}>
+            Login
+          </Button>
         )}
       </div>
     </Segment>

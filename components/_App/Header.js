@@ -1,6 +1,7 @@
 import { Menu, Container, Image, Icon } from "semantic-ui-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { handleLogout } from "../../utils/auth";
 
 export default function Header({ user }) {
   const { pathname } = useRouter();
@@ -46,7 +47,7 @@ export default function Header({ user }) {
               </Menu.Item>
             </Link>
 
-            <Menu.Item header>
+            <Menu.Item header onClick={handleLogout}>
               <Icon name="sign out" size="large" />
               Logout
             </Menu.Item>

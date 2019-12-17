@@ -2,10 +2,10 @@ import fetch from "isomorphic-unfetch";
 import ProductSummary from "../components/Product/ProductSummary";
 import ProductAttributes from "../components/Product/ProductAttributes";
 
-export default function Product({ product }) {
+export default function Product({ product, user }) {
   return (
     <>
-      <ProductSummary {...product} />
+      <ProductSummary {...product} user={user} />
       <ProductAttributes {...product} />
     </>
   );
