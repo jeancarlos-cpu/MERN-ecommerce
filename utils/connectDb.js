@@ -1,24 +1,20 @@
 import mongoose from "mongoose";
 
-const connection = {};
+async function connectDb() {
+  const options = {
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  };
 
-const connectDb = async () => {
-  // using existing connection
-  if (connection.isConnected) {
-    return;
+  if (mongoose.connections && mongoose.connections[0]) {
+    if (mongoose.connections[0].readyState) {
+      return;
+    }
   }
 
-  try {
-    const db = await mongoose.connect(process.env.MONGO_DOCKER_URI, {
-      useCreateIndex: true,
-      useFindAndModify: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-    connection.isConnected = db.connections[0].readyState;
-  } catch (e) {
-    console.error(e);
-  }
-};
+  await mongoose.connect(process.env.MONGO_DOCKER_URI, options);
+}
 
 export default connectDb;
